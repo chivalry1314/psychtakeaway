@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { Play, HelpCircle, AlertTriangle } from 'lucide-react';
+import { Play, HelpCircle, AlertTriangle, Trophy } from 'lucide-react';
 
 interface MainMenuProps {
   onStart: () => void;
   onHelp: () => void;
+  onAchievements: () => void;
 }
 
-export default function MainMenu({ onStart, onHelp }: MainMenuProps) {
+export default function MainMenu({ onStart, onHelp, onAchievements }: MainMenuProps) {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -80,10 +81,19 @@ export default function MainMenu({ onStart, onHelp }: MainMenuProps) {
         </button>
 
         {/* 次要按钮 */}
-        <div className="flex gap-4 mt-6">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6">
+          <button
+            onClick={onAchievements}
+            className="flex items-center justify-center gap-2 px-6 py-3 text-yellow-400 hover:text-yellow-300
+                       border border-yellow-700/60 hover:border-yellow-500/80 rounded-lg
+                       transition-all duration-300 hover:bg-yellow-900/20"
+          >
+            <Trophy size={18} />
+            <span>成就殿堂</span>
+          </button>
           <button
             onClick={onHelp}
-            className="flex items-center gap-2 px-6 py-3 text-gray-300 hover:text-white
+            className="flex items-center justify-center gap-2 px-6 py-3 text-gray-300 hover:text-white
                        border border-gray-600 hover:border-gray-400 rounded-lg
                        transition-all duration-300 hover:bg-white/10"
           >

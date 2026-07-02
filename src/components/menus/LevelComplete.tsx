@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CheckCircle, Home, ArrowRight, AlertTriangle, Receipt } from 'lucide-react';
+import { CheckCircle, Home, ArrowRight, AlertTriangle, Receipt, Trophy } from 'lucide-react';
 import type { EconomyEvent } from '@/types/game';
 
 interface LevelCompleteProps {
@@ -12,11 +12,12 @@ interface LevelCompleteProps {
   economyEvents: EconomyEvent[];
   onNextLevel: () => void;
   onMainMenu: () => void;
+  onViewAchievements?: () => void;
 }
 
 export default function LevelComplete({
   levelId, levelName, todayIncome, rentCost, violations, completedOrders,
-  economyEvents, onNextLevel, onMainMenu
+  economyEvents, onNextLevel, onMainMenu, onViewAchievements
 }: LevelCompleteProps) {
   const [showDetail, setShowDetail] = useState(false);
   const [animIncome, setAnimIncome] = useState(0);
@@ -161,14 +162,26 @@ export default function LevelComplete({
               <ArrowRight size={18} />
             </button>
           ) : canContinue && levelId === 10 ? (
-            <button
-              onClick={onMainMenu}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-purple-600 hover:bg-purple-500
-                         text-white font-bold rounded-lg transition-colors"
-            >
-              <span>通关完成</span>
-              <CheckCircle size={18} />
-            </button>
+            <div className="flex flex-col gap-3 w-full">
+              {onViewAchievements && (
+                <button
+                  onClick={onViewAchievements}
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-yellow-700 hover:bg-yellow-600
+                             text-yellow-100 font-bold rounded-lg transition-colors border border-yellow-500/40"
+                >
+                  <Trophy size={18} />
+                  <span>查看生涯总结</span>
+                </button>
+              )}
+              <button
+                onClick={onMainMenu}
+                className="w-full flex items-center justify-center gap-2 py-3 bg-purple-600 hover:bg-purple-500
+                           text-white font-bold rounded-lg transition-colors"
+              >
+                <span>通关完成 / 回到主菜单</span>
+                <CheckCircle size={18} />
+              </button>
+            </div>
           ) : (
             <button
               onClick={onMainMenu}

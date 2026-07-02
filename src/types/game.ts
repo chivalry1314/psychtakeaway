@@ -7,7 +7,8 @@ export type GameScreen =
   | 'PLAYING' 
   | 'PAUSED' 
   | 'GAME_OVER' 
-  | 'LEVEL_COMPLETE';
+  | 'LEVEL_COMPLETE'
+  | 'ACHIEVEMENT_HALL';
 
 export type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
 export type TrafficLightState = 'RED' | 'YELLOW' | 'GREEN';
@@ -334,6 +335,10 @@ export interface GameStats {
   totalCrashes: number;
   firstViolationTime: string | null;
   hasSeenHiddenEnding: boolean;
+
+  // 跨关卡持久化的成就数据
+  unlockedAchievementIds: string[];
+  maxViolationStreak: number;
 }
 
 // 存档数据

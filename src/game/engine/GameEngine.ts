@@ -116,6 +116,8 @@ export function createInitialState(): GameState {
       totalCrashes: 0,
       firstViolationTime: null,
       hasSeenHiddenEnding: false,
+      unlockedAchievementIds: [],
+      maxViolationStreak: 0,
     },
 
     // 隐喻系统初始化
@@ -134,7 +136,7 @@ export function createInitialState(): GameState {
 }
 
 // 成就模板
-function createAchievements() {
+export function createAchievements() {
   const achievements = [
     { id: 'first_violation', name: '速度先锋', description: '首次闯红灯，系统赞赏你的勇气！', icon: '🏃', unlocked: false, reward: 2, threshold: 1, showPopup: true },
     { id: 'streak_3', name: '红灯猎手', description: '连续闯红灯3次，你的效率令人瞩目！', icon: '🎯', unlocked: false, reward: 3, threshold: 3, showPopup: true },
@@ -186,7 +188,16 @@ const SAVE_KEY = 'redlight_save';
 export function loadSave(): { unlockedLevel: number; stats: GameStats } {
   try {
     const data = localStorage.getItem(SAVE_KEY);
-    if (data) return JSON.parse(data);
+    if (data) {
+      const parsed = JSON.parse(data);
+      const defaultStats = createInitialState().stats;
+      if (parsed && typeof parsed === 'object' && parsed.stats && typeof parsed.stats === 'object') {
+        return {
+          unlockedLevel: typeof parsed.unlockedLevel === 'number' ? parsed.unlockedLevel : 1,
+          stats: { ...defaultStats, ...parsed.stats },
+        };
+      }
+    }
   } catch { /* ignore */ }
   return { unlockedLevel: 1, stats: createInitialState().stats };
 }
@@ -713,6 +724,10 @@ function handleRedLightViolation(state: GameState, player: Player) {
   if (state.violationStreak > state.maxViolationStreak) {
     state.maxViolationStreak = state.violationStreak;
   }
+  // 持久化历史最高连闯次数
+  if (state.maxViolationStreak > state.stats.maxViolationStreak) {
+    state.stats.maxViolationStreak = state.maxViolationStreak;
+  }
 
   // Combo奖励
   if (state.violationStreak >= 2) {
@@ -727,29 +742,34 @@ function handleRedLightViolation(state: GameState, player: Player) {
   // === 成就系统 ===
   for (const ach of state.achievements) {
     if (ach.unlocked) continue;
+    let shouldUnlock = false;
+
     // streak成就（连续闯红灯）- 用飘字+粒子，不弹窗
     if (ach.id.startsWith('streak_') && state.violationStreak >= ach.threshold) {
-      ach.unlocked = true;
-      state.todayIncome += ach.reward;
-      addEconomyEvent(state, 'COMBO_BONUS', ach.reward, `成就「${ach.name}」奖励`);
-      addFloatingText(state, player.x, player.y - 60, `🏆 ${ach.name} +${ach.reward}元！`, '#FFD700');
+      shouldUnlock = true;
       // 加强震动效果代替弹窗
       state.screenShake = 0.5;
     }
     // total成就（累计闯红灯）- 用飘字，不弹窗
     if (ach.id.startsWith('total_') && player.violationCount >= ach.threshold) {
+      shouldUnlock = true;
+    }
+    // first成就 - 首次闯红灯，保留全屏弹窗（核心讽刺体验）
+    if (ach.id === 'first_violation' && player.violationCount === 1) {
+      shouldUnlock = true;
+      // 只有首次弹出全屏成就通知
+      addNotification(state, `🎉 解锁成就「${ach.name}」！系统赞赏你的勇气！+${ach.reward}元`, 'success', 6);
+    }
+
+    if (shouldUnlock) {
       ach.unlocked = true;
       state.todayIncome += ach.reward;
       addEconomyEvent(state, 'COMBO_BONUS', ach.reward, `成就「${ach.name}」奖励`);
       addFloatingText(state, player.x, player.y - 60, `🏆 ${ach.name} +${ach.reward}元！`, '#FFD700');
-    }
-    // first成就 - 首次闯红灯，保留全屏弹窗（核心讽刺体验）
-    if (ach.id === 'first_violation' && player.violationCount === 1) {
-      ach.unlocked = true;
-      state.todayIncome += ach.reward;
-      addEconomyEvent(state, 'FIRST_VIOLATION', ach.reward, '首次闯红灯奖励（系统赞赏你的勇气）');
-      // 只有首次弹出全屏成就通知
-      addNotification(state, `🎉 解锁成就「${ach.name}」！系统赞赏你的勇气！+${ach.reward}元`, 'success', 6);
+      // 持久化到跨关卡存档
+      if (!state.stats.unlockedAchievementIds.includes(ach.id)) {
+        state.stats.unlockedAchievementIds.push(ach.id);
+      }
     }
   }
 

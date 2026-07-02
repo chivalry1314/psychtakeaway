@@ -13,6 +13,7 @@ import StoryDialogue from '@/components/menus/StoryDialogue';
 import GameCanvas from '@/components/GameCanvas';
 import GameOver from '@/components/menus/GameOver';
 import LevelComplete from '@/components/menus/LevelComplete';
+import AchievementHall from '@/components/menus/AchievementHall';
 import { LEVELS } from '@/game/levels/levels';
 
 export default function App() {
@@ -35,6 +36,13 @@ export default function App() {
 
   const goToLevelSelect = useCallback(() => {
     setState(prev => ({ ...prev, screen: 'LEVEL_SELECT' }));
+  }, []);
+
+  const goToAchievements = useCallback(() => {
+    setState(prev => {
+      saveSave(prev.unlockedLevel, prev.stats);
+      return { ...prev, screen: 'ACHIEVEMENT_HALL', paused: false };
+    });
   }, []);
 
   const selectLevel = useCallback((levelId: number) => {
@@ -89,7 +97,11 @@ export default function App() {
     <div className="w-screen h-screen overflow-hidden bg-black">
       {/* 主菜单 */}
       {state.screen === 'MAIN_MENU' && (
-        <MainMenu onStart={goToLevelSelect} onHelp={() => setShowHelp(true)} />
+        <MainMenu
+          onStart={goToLevelSelect}
+          onHelp={() => setShowHelp(true)}
+          onAchievements={goToAchievements}
+        />
       )}
 
       {showHelp && <HelpDialog onClose={() => setShowHelp(false)} />}
@@ -150,7 +162,13 @@ export default function App() {
           economyEvents={state.economyEvents}
           onNextLevel={goToNextLevel}
           onMainMenu={goToMainMenu}
+          onViewAchievements={state.currentLevel === 10 ? goToAchievements : undefined}
         />
+      )}
+
+      {/* 成就殿堂 */}
+      {state.screen === 'ACHIEVEMENT_HALL' && (
+        <AchievementHall stats={state.stats} onMainMenu={goToMainMenu} />
       )}
     </div>
   );
