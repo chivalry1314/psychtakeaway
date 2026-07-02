@@ -14,7 +14,7 @@ export default function MainMenu({ onStart, onHelp }: MainMenuProps) {
       {/* 背景图 */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: 'url(/assets/images/menu_bg.png)' }}
+        style={{ backgroundImage: 'url(assets/images/menu_bg.png)' }}
       />
       {/* 暗色遮罩 */}
       <div className="absolute inset-0 bg-black/60" />

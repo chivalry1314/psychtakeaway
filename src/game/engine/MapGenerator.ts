@@ -138,7 +138,7 @@ export function generateCityMap(level: LevelConfig, state: GameState) {
           id: `b_${bId++}`,
           x: bx, y: by,
           width: bw, height: bh,
-          image: '/assets/images/building.png',
+          image: 'assets/images/building.png',
         });
       }
     }
@@ -204,7 +204,7 @@ export function generateCityMap(level: LevelConfig, state: GameState) {
       width: 50, height: 50,
       vx: 0, vy: 0, rotation: 0, active: true,
       name: restaurantNames[i % restaurantNames.length],
-      image: '/assets/images/restaurant.png',
+      image: 'assets/images/restaurant.png',
     });
   }
   // 生成顾客
@@ -217,7 +217,7 @@ export function generateCityMap(level: LevelConfig, state: GameState) {
       vx: 0, vy: 0, rotation: 0, active: true,
       name: customerNames[i % customerNames.length],
       orderId: null,
-      image: '/assets/images/customer.png',
+      image: 'assets/images/customer.png',
       patience: 100,
     });
   }

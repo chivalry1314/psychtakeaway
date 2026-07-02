@@ -22,11 +22,11 @@ function getImg(src: string): HTMLImageElement | null {
 }
 
 const IMAGE_PATHS = [
-  '/assets/images/player.png',
-  '/assets/images/car_yellow.png',
-  '/assets/images/truck_black.png',
-  '/assets/images/restaurant.png',
-  '/assets/images/customer.png',
+  'assets/images/player.png',
+  'assets/images/car_yellow.png',
+  'assets/images/truck_black.png',
+  'assets/images/restaurant.png',
+  'assets/images/customer.png',
 ];
 IMAGE_PATHS.forEach(p => getImg(p));
 
@@ -231,7 +231,7 @@ function spawnVehicle(state: GameState, level: LevelConfig): Vehicle | null {
     stopped: false,
     stopTimer: 0,
     vehicleType: isTruck ? 'truck' : 'car',
-    image: isTruck ? '/assets/images/truck_black.png' : '/assets/images/car_yellow.png',
+    image: isTruck ? 'assets/images/truck_black.png' : 'assets/images/car_yellow.png',
   };
 }
 
@@ -1339,7 +1339,7 @@ function renderPlayer(ctx: CanvasRenderingContext2D, state: GameState) {
     ctx.globalAlpha = 0.5;
   }
 
-  const img = getImg('/assets/images/player.png');
+  const img = getImg('assets/images/player.png');
   if (img) {
     ctx.drawImage(img, -p.width / 2, -p.height / 2, p.width, p.height);
   } else {
