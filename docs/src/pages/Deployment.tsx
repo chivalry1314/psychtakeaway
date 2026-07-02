@@ -9,8 +9,8 @@ export default function Deployment() {
 
       <h2 className="text-xl font-bold text-white mt-8 mb-3">部署地址</h2>
       <ul className="list-disc list-inside text-gray-300 space-y-2">
-        <li>游戏本体：<code className="bg-gray-800 px-1.5 py-0.5 rounded">https://&lt;用户名&gt;.github.io/&lt;仓库名&gt;/</code></li>
-        <li>在线文档：<code className="bg-gray-800 px-1.5 py-0.5 rounded">https://&lt;用户名&gt;.github.io/&lt;仓库名&gt;/docs/</code></li>
+        <li>游戏本体：<code className="bg-gray-800 px-1.5 py-0.5 rounded">https://chivalry1314.github.io/psychtakeaway/</code></li>
+        <li>在线文档：<code className="bg-gray-800 px-1.5 py-0.5 rounded">https://chivalry1314.github.io/psychtakeaway/docs/</code></li>
       </ul>
 
       <h2 className="text-xl font-bold text-white mt-8 mb-3">工作流文件</h2>

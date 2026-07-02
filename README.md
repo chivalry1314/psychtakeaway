@@ -19,10 +19,8 @@
 
 本项目通过 GitHub Actions 自动部署到 GitHub Pages：
 
-- 🎮 游戏本体：`https://<用户名>.github.io/<仓库名>/`
-- 📖 在线文档：`https://<用户名>.github.io/<仓库名>/docs/`
-
-> 将 `<用户名>` 和 `<仓库名>` 替换为你的 GitHub 用户名和仓库名即可访问。
+- 🎮 游戏本体：https://chivalry1314.github.io/psychtakeaway/
+- 📖 在线文档：https://chivalry1314.github.io/psychtakeaway/docs/
 
 ## 本地运行
 
